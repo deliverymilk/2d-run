@@ -7,25 +7,20 @@ using UnityEngine.UI;
 public class PlatformManager : MonoBehaviour
 {
     [SerializeField] GameObject platform;
+    private WaitForSeconds wait = new WaitForSeconds(5);
 
     void Start()
     {
-        //Instantiate : 게임 오브젝트를 생성하는 함수
-        // 첫번째 매개변수 : 생성하고 싶은 게임 오브젝트
-        // 두번째 매개변수 : 게임 오브젝트의 위치
-        // 세번째 매개변수 : 게임 오브젝트의 회전
-
-        Instantiate
-            (
-               platform,
-               transform.position,
-               Quaternion.identity
-            );
-        
+        StartCoroutine(CreateObject());
     }
 
-    void Update()
+    IEnumerator CreateObject()
     {
-        
+        while(true)
+        {
+            ObjectPoolManager.instance.GetQueue();
+
+            yield return wait;
+        }
     }
 }
