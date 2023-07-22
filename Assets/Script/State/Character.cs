@@ -10,13 +10,27 @@ public class Character : MonoBehaviour
 {
 
     private bool flag = false;
-    private Rigidbody2D rigidBody;
-    [SerializeField] float jumpPower = 500;
 
+    private Animator animator;
+    private Rigidbody2D rigidBody;
+
+    private IState state = null;
+
+    private void SwitchState(IState state)
+    {
+        this.state = state;
+        this.state.Action(animator, rigidBody);
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        animator = GetComponent<Animator>();
+        rigidBody = GetComponent<Rigidbody2D>();
+
+        SwitchState(new Run());
+
+
         rigidBody = GetComponent<Rigidbody2D>();
     }
 
@@ -25,6 +39,10 @@ public class Character : MonoBehaviour
     {
         if(Input.GetKeyDown(KeyCode.Space))
         {
+            SwitchState(new Jump());
+
+            state.Action(animator,rigidBody);
+
             flag = true;
         }
     }
@@ -33,13 +51,18 @@ public class Character : MonoBehaviour
     {
         if(flag==true)
         {
+            SwitchState(new Jump());
+
             flag = false;
 
-            rigidBody.AddForce
-                (
-                Vector2.up * jumpPower*Time.fixedDeltaTime,
-                ForceMode2D.Impulse
-                );
+
+        }
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.CompareTag("Death Zone"))
+        {
+            SwitchState(new Die());
         }
     }
 }

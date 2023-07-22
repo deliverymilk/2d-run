@@ -9,7 +9,7 @@ public class PlatformManager : MonoBehaviour
     [SerializeField] GameObject platform;
     private WaitForSeconds wait = new WaitForSeconds(5);
 
-    void Start()
+    void Awake()
     {
         StartCoroutine(CreateObject());
     }
@@ -18,6 +18,8 @@ public class PlatformManager : MonoBehaviour
     {
         while(true)
         {
+            yield return new WaitForSeconds(0.01f);
+
             ObjectPoolManager.instance.GetQueue();
 
             yield return wait;
