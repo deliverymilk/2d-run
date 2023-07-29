@@ -27,6 +27,11 @@ public class SoundManager : MonoBehaviour
             instance = this;
         }
 
+        else
+        {
+            Destroy(gameObject);
+        }
+
     }
     // Start is called before the first frame update
 }
